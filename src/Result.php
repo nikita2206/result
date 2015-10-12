@@ -31,9 +31,29 @@ abstract class Result
     }
 
     /**
+     * @param mixed $data
+     * @param mixed $err
+     * @return Result
+     */
+    public static function errOnNull($data, $err)
+    {
+        return $data === null ? new Err($err) : new Ok($data);
+    }
+
+    /**
      * When you need to return Result from your function, and it also depends on another
      * functions returning Results, you can make it a generator function and yield
-     * values from dependant functions
+     * values from dependant functions, this pattern makes code less bloated with
+     * statements like this:
+     * $res = something();
+     * if ($res instanceof Ok) {
+     *     $something = $res->unwrap();
+     * } else {
+     *     return $res;
+     * }
+     *
+     * Instead you can write:
+     * $something = (yield something());
      *
      * @see /example.php
      *
