@@ -93,6 +93,19 @@ abstract class Result
     }
 
     /**
+     * @param callable $mapper
+     * @return Result
+     */
+    public function remapOk(callable $mapper)
+    {
+        if ($this instanceof Err) {
+            return $this;
+        } else {
+            return Result::ok($mapper($this->unwrap()));
+        }
+    }
+
+    /**
      * @return bool
      */
     public abstract function isErr();
